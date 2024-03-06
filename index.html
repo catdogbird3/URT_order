@@ -62,7 +62,9 @@
         <form id="orderForm">
             <label for="name">姓名：</label>
             <input type="text" id="name" name="name" required>
-            
+		
+            <label for="name">飲料名稱：</label>
+            <input type="text" id="drinkname" name="drinkname" required>
           
 			<label for="sweetness">甜度：(預設微糖)</label>
             <input type="range" id="sweetness" name="sweetness" min="1" max="5" value="2">
@@ -98,7 +100,6 @@
         const iceRange = document.getElementById('ice');
         const sweetnessLabel = document.getElementById('sweetnessLabel');
         const iceLabel = document.getElementById('iceLabel');
-        
         const sweetnessValues = ['無糖', '微糖', '半糖', '少糖', '全糖'];
         const iceValues = ['去冰', '微冰', '半冰', '少冰', '全冰'];
         
