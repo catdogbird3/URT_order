@@ -131,7 +131,7 @@
         const csvData = `${name},${sweetness},${ice},${hot},${size},${quantity},${price}`;
 
         // 发送数据到 GitHub Actions
-        fetch('/.github/workflows/', {
+        fetch('/.github/workflows/store_data.yml', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
