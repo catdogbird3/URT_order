@@ -14,8 +14,8 @@ jobs:
 
       - name: Append form data to CSV
         run: |
-          echo "Name,Sweetness,Ice,Hot,Size,Quantity,Price" >> URT_order/data.csv
-          echo "${{ github.event.head_commit.author.name }}," >> URT_order/data.csv
-          echo "${{ github.event.head_commit.author.email }}," >> URT_order/data.csv
-          echo "${{ github.event.head_commit.author.date }}," >> URT_order/data.csv
-          echo "${{ github.event.head_commit.message }}" >> URT_order/data.csv
+          echo "Name,Sweetness,Ice,Hot,Size,Quantity,Price" >> data.csv
+          echo "${{ github.event.head_commit.author.name }}," >> data.csv
+          echo "${{ github.event.head_commit.author.email }}," >> data.csv
+          echo "${{ github.event.head_commit.author.date }}," >> data.csv
+          echo "${{ github.event.head_commit.message }}" >> data.csv
