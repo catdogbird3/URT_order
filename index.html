@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google</title>
+    <style>
+        body {
+            font-family: "微軟正黑體", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 8px;
+        }
+        input[type="text"], input[type="number"], input[type="range"], select {
+            padding: 8px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .right-align {
+            text-align: right;
+        }
+        select {
+            height: 38px; /* 设置下拉框的高度 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>訂購您的飲料</h1>
+		    <h2>本次飲料店名：</h2>
+			<h3>訂購日期：</h3>
+        <form id="orderForm">
+            <label for="name">姓名：</label>
+            <input type="text" id="name" name="name" required>
+            
+          
+			<label for="sweetness">甜度：(預設微糖)</label>
+            <input type="range" id="sweetness" name="sweetness" min="1" max="5" value="2">
+            <span id="sweetnessLabel" class="right-align"></span>
+            
+            <label for="ice">冰塊：(預設微冰)</label>
+            <input type="range" id="ice" name="ice" min="1" max="5" value="2">
+            <span id="iceLabel" class="right-align"></span>
+			
+			<label for="hot" style="display: inline-block;">我要熱飲：</label>
+			<input type="checkbox" id="hot" name="hot" style="display: inline-block;">
+
+            
+            <label for="size">大小：</label>
+            <select id="size" name="size">
+                <option value="large">大杯</option>
+                <option value="medium">中杯</option>
+            </select>
+            
+            <label for="quantity">數量：</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>
+			
+			<label for="price">單價：</label>
+            <input type="number" id="price" name="price" min="1" required>
+            
+            
+            <input type="submit" value="提交訂單">
+        </form>
+    </div>
+
+    <script>
+        const sweetnessRange = document.getElementById('sweetness');
+        const iceRange = document.getElementById('ice');
+        const sweetnessLabel = document.getElementById('sweetnessLabel');
+        const iceLabel = document.getElementById('iceLabel');
+        
+        const sweetnessValues = ['無糖', '微糖', '半糖', '少糖', '全糖'];
+        const iceValues = ['去冰', '微冰', '半冰', '少冰', '全冰'];
+        
+        sweetnessRange.addEventListener('input', () => {
+            const value = parseInt(sweetnessRange.value);
+            sweetnessLabel.textContent = sweetnessValues[value - 1];
+        });
+        
+        iceRange.addEventListener('input', () => {
+            const value = parseInt(iceRange.value);
+            iceLabel.textContent = iceValues[value - 1];
+        });
+    </script>
+</body>
+</html>
