@@ -1,4 +1,4 @@
-name: Store Form Data
+name: Store data in CSV
 
 on:
   push:
@@ -6,16 +6,74 @@ on:
       - main
 
 jobs:
-  store_data:
+  addData:
+    name: Add data to CSV
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Append form data to CSV
+      - name: Write data to CSV
         run: |
           echo "name,sweetness,ice,hot,size,quantity,price" >> data.csv
-          echo "${{ github.event.head_commit.author.name }}," >> data.csv
-          echo "${{ github.event.head_commit.author.email }}," >> data.csv
-          echo "${{ github.event.head_commit.author.date }}," >> data.csv
-          echo "${{ github.event.head_commit.message }}" >> data.csv
+          echo "${{ github.actor }},$1,$2,$3,$4,$5,$6" >> data.csv
+        shell: bash
+        env:
+          1: ${{ steps.getParam.outputs.sweetness }}
+          2: ${{ steps.getParam.outputs.ice }}
+          3: ${{ steps.getParam.outputs.hot }}
+          4: ${{ steps.getParam.outputs.size }}
+          5: ${{ steps.getParam.outputs.quantity }}
+          6: ${{ steps.getParam.outputs.price }}
+
+      - name: Store data artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: order_data
+          path: data.csv
+
+  getParam:
+    name: Get form parameters
+    runs-on: ubuntu-latest
+    needs: addData
+    steps:
+      - name: Extract form parameters
+        id: getParam
+        run: |
+          echo "::set-output name=sweetness::${{ toJson(steps.parseForm.outputs.sweetness) }}"
+          echo "::set-output name=ice::${{ toJson(steps.parseForm.outputs.ice) }}"
+          echo "::set-output name=hot::${{ toJson(steps.parseForm.outputs.hot) }}"
+          echo "::set-output name=size::${{ toJson(steps.parseForm.outputs.size) }}"
+          echo "::set-output name=quantity::${{ toJson(steps.parseForm.outputs.quantity) }}"
+          echo "::set-output name=price::${{ toJson(steps.parseForm.outputs.price) }}"
+
+  parseForm:
+    name: Parse form data
+    runs-on: ubuntu-latest
+    needs: processForm
+    steps:
+      - name: Parse form data
+        id: parseForm
+        run: |
+          echo "${{ github.event.inputs.name }}" >> data.csv
+          echo "${{ github.event.inputs.sweetness }}" >> data.csv
+          echo "${{ github.event.inputs.ice }}" >> data.csv
+          echo "${{ github.event.inputs.hot }}" >> data.csv
+          echo "${{ github.event.inputs.size }}" >> data.csv
+          echo "${{ github.event.inputs.quantity }}" >> data.csv
+          echo "${{ github.event.inputs.price }}" >> data.csv
+
+  processForm:
+    name: Process form submission
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get form inputs
+        id: formInputs
+        run: |
+          echo "::set-output name=name::${{ github.event.inputs.name }}"
+          echo "::set-output name=sweetness::${{ github.event.inputs.sweetness }}"
+          echo "::set-output name=ice::${{ github.event.inputs.ice }}"
+          echo "::set-output name=hot::${{ github.event.inputs.hot }}"
+          echo "::set-output name=size::${{ github.event.inputs.size }}"
+          echo "::set-output name=quantity::${{ github.event.inputs.quantity }}"
+          echo "::set-output name=price::${{ github.event.inputs.price }}"
