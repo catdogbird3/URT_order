@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google</title>
+    <title>訂購您的飲料</title>
     <style>
         body {
             font-family: "微軟正黑體", sans-serif;
@@ -112,43 +112,56 @@
             const value = parseInt(iceRange.value);
             iceLabel.textContent = iceValues[value - 1];
         });
-    </script>
-	
-	<script>
-    document.getElementById("orderForm").addEventListener("submit", function(event) {
-        event.preventDefault(); // 阻止表单默认提交行为
 
-        // 获取表单数据
-        const formData = new FormData(this);
-        const name = formData.get("name");
-        const sweetness = formData.get("sweetness");
-        const ice = formData.get("ice");
-        const hot = formData.get("hot") ? "Yes" : "No"; // 处理复选框
-        const size = formData.get("size");
-        const quantity = formData.get("quantity");
-        const price = formData.get("price");
+        document.getElementById("orderForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // 阻止表单默认提交行为
 
-        // 构造 CSV 格式的数据
-        const csvData = `${name},${sweetness},${ice},${hot},${size},${quantity},${price}`;
+            // 获取表单数据
+            const formData = new FormData(this);
+            const name = formData.get("name");
+            const drinkName = formData.get("drinkname");
+            const sweetness = formData.get("sweetness");
+            const ice = formData.get("ice");
+            const hot = formData.get("hot") ? "Yes" : "No"; // 处理复选框
+            const size = formData.get("size");
+            const quantity = formData.get("quantity");
+            const price = formData.get("price");
 
-        // 发送数据到 GitHub Actions
-        fetch('/.github/workflows/store_data.yml', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ data: csvData })
-        }).then(response => {
-            if (response.ok) {
-                alert('Order submitted successfully!');
-            } else {
-                alert('Failed to submit order. Please try again later.');
-            }
-        }).catch(error => {
-            console.error('Error submitting order:', error);
-            alert('An unexpected error occurred. Please try again later.');
+            // 构造 Issue 标题和内容
+            const title = "New Order: " + name; // 根据需要调整标题格式
+            let body = "Name: " + name + "\n"; // 根据需要添加其他表单字段到内容中
+            body += "Drink Name: " + drinkName + "\n";
+            body += "Sweetness: " + sweetness + "\n";
+            body += "Ice: " + ice + "\n";
+            body += "Hot: " + hot + "\n";
+            body += "Size: " + size + "\n";
+            body += "Quantity: " + quantity + "\n";
+            body += "Price: " + price + "\n";
+
+            // 发送数据到 GitHub Issue
+            fetch('https://api.github.com/repos/{owner}/{repo}/issues', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'token YOUR_PERSONAL_ACCESS_TOKEN',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title: title,
+                    body: body
+                })
+            }).then(response => {
+                if (response.ok) {
+                    alert('Order submitted successfully!');
+                    // 清除表单
+                    this.reset();
+                } else {
+                    alert('Failed to submit order. Please try again later.');
+                }
+            }).catch(error => {
+                console.error('Error submitting order:', error);
+                alert('An unexpected error occurred. Please try again later.');
+            });
         });
-    });
-</script>
+    </script>
 </body>
 </html>
