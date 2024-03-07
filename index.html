@@ -63,7 +63,7 @@
             <label for="name">姓名：</label>
             <input type="text" id="name" name="name" required>
 		
-            <label for="name">飲料名稱：</label>
+            <label for="drinkname">飲料名稱：</label>
             <input type="text" id="drinkname" name="drinkname" required>
           
 			<label for="sweetness">甜度：(預設微糖)</label>
@@ -128,22 +128,15 @@
             const price = formData.get("price");
 
             // 构造 Issue 标题和内容
-            const title = "New Order: " + name; // 根据需要调整标题格式
-            let body = "Name: " + name + "\n"; // 根据需要添加其他表单字段到内容中
-            body += "Drink Name: " + drinkName + "\n";
-            body += "Sweetness: " + sweetness + "\n";
-            body += "Ice: " + ice + "\n";
-            body += "Hot: " + hot + "\n";
-            body += "Size: " + size + "\n";
-            body += "Quantity: " + quantity + "\n";
-            body += "Price: " + price + "\n";
+            const title = `訂購飲料：${name}`;
+            const body = `**姓名：** ${name}\n**飲料名稱：** ${drinkName}\n**甜度：** ${sweetness}\n**冰塊：** ${ice}\n**熱飲：** ${hot}\n**大小：** ${size}\n**數量：** ${quantity}\n**單價：** ${price}`;
 
-            // 发送数据到 GitHub Issue
-            fetch('https://api.github.com/repos/{owner}/{repo}/issues', {
+            // 发送数据到 GitHub Issues
+            fetch('https://api.github.com/repos/catdogbird3/URT_order/issues', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'token YOUR_PERSONAL_ACCESS_TOKEN',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer  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'
                 },
                 body: JSON.stringify({
                     title: title,
